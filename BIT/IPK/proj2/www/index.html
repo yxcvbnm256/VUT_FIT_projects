@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<HTML>
+<HEAD>
+	<TITLE>What is the difference between the HTM and HTML extensions?</TITLE>
+	<LINK REV="made" HREF="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#111;&#115;&#104;&#64;&#115;&#105;&#103;&#104;&#116;&#115;&#112;&#101;&#99;&#105;&#102;&#105;&#99;&#46;&#99;&#111;&#109;">
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#FF0000" ALINK="#00FF00">
+	<H3>What is the difference between the HTM and HTML extensions?</H3>
+
+	<H4>Short Answer</H4>
+
+	<P>
+		Other than the obvious, the letter "L," there's not much of a
+		difference between the two extensions.  Most, if not all, web
+		browsers and servers will treat a file with an HTM extension
+		exactly as it would a file with an HTML extension, and vice
+		versa.
+	</P>
+
+	<H4>Long Answer</H4>
+
+	<H5>Practical Differences</H5>
+
+	<P>
+		Practically speaking, there is no difference between the two
+		extensions.  Both denote that the file contains HTML.  This
+		is really a matter of convention and is not an absolute, but
+		most realize that a file whose extension is <TT>htm</TT> <EM>or</EM>
+		<TT>html</TT> contains HTML.
+	</P>
+
+	<P>
+		On most, if not all, servers either file will be sent with a
+		MIME type of text/html by default.  This can usually be
+		changed by the server's administrator(s), but is, more often
+		then not, left alone.
+	</P>
+
+	<P>
+		On most, if not all, browsers, either file will be displayed
+		as intended (i.e. rendered according to the browser's default
+		manner of displaying HTML documents).  This last is due more
+		to the MIME type sent by the server then by the file's
+		extension, but that's a matter for another FAQ.
+	</P>
+
+	<P>
+		Generally, the use of <TT>htm</TT> over <TT>html</TT>, or vice versa, is left
+		to the author's personal preferences.
+	</P>
+
+	<H5>Technical Differences</H5>
+
+	<P>
+		Technically speaking there are few to no important differences.
+		An obvious difference is the addition of the letter "L" in
+		the <TT>html</TT> extension.  The technical difference that the
+		additional letter will make to the operating system is
+		better left to a different discussion but in the context of
+		a web author, the additional "L" will make no difference.
+	</P>
+
+	<P>
+		The technical difference that the additional letter will make
+		to an http server (a "web server") is minimal.  Usually, a
+		server will use a file's extension to figure out what MIME
+		type to send back to the requesting client.  Most servers
+		are configured by default to send back the text/html type
+		when the requested file ends in an <TT>htm</TT> or <TT>html</TT> extension.
+		This can be changed by the server's administrator(s) in such
+		a way that one of the above extensions returns a different
+		MIME type than the other, however, this is not a very common
+		practice.
+	</P>
+
+	<P>
+		It is a common misconception that a file ending in an <TT>htm</TT>
+		extension had to have been created on a DOS/Windows 3.x
+		platform.  This is because those operating environments
+		limit filenames to a 3 letter extension.  However, it is very
+		simple to create a file with a 3 letter extension on most
+		other platforms, as well.  Even those that allow longer file
+		extensions.
+	</P>
+
+	<H5>Default Filenames</H5>
+
+	<P>
+		The one situation in which there may be a difference between
+		the two extensions is that of a server's default filenames.
+		When a URL that does not specify a filename is requested from
+		a server, such as <TT>http://www.domain.dom/dirname/</TT>,
+		the server returns a file from the requested URL that matches
+		a default filename.  Examples of common default filenames
+		include "index.html," "index.htm," "welcome.html,"
+		"welcome.htm," "default.html," "default.htm," etc.  However,
+		an administrator can make the server's default filename
+		anything he/she so desires.
+	</P>
+
+	<P>
+		In the case of a default file, the author's filename must be
+		exactly the same as the server's default filename.  In other
+		words, if your server is configured to use "index.html" as
+		the default filename, your file must be named "index.html"
+		and <EM>not</EM> "index.htm."
+	</P>
+
+	<P>
+		Note that servers are often configured with more then one
+		default filename.  Check with your server administrator or
+		ISP for details about your specific server.
+	</P>
+
+	<HR>
+
+	<TABLE BORDER=0>
+		<TR>
+			<TD ALIGN=left>
+				<SMALL><A HREF="./">[Section Index]</A></SMALL>
+			</TD>
+			<TD ALIGN=right>
+				<SMALL><A HREF="../">[Home Page]</A></SMALL>
+			</TD>
+		</TR>
+	</TABLE>
+</BODY>
+</HTML>

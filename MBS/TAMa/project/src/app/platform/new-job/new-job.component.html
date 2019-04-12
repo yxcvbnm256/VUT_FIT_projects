@@ -1,0 +1,88 @@
+<div fxLayout="column" [formGroup]="group" style="margin: 16px;">
+  <h2 fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="8px">
+    <mat-icon color="primary">work</mat-icon>
+    <span>Create a New Job</span>
+  </h2>
+  <mat-form-field>
+    <input matInput formControlName="name" placeholder="Name">
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput fxFill="" formControlName="description" placeholder="Description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Category" formControlName="category">
+      <mat-option *ngFor="let c of categoriesKeys" [value]="c">
+        <mat-icon>{{categoriesList[c]}}</mat-icon>
+        {{c}}
+      </mat-option>
+      <mat-select-trigger>
+        <mat-icon>{{categoriesList[group.controls.category.value]}}</mat-icon>
+        {{group.controls.category.value}}
+      </mat-select-trigger>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="dueTo" [matDatepicker]="picker" placeholder="Choose a Due Date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+           formControlName="address"
+           placeholder="Address"
+           [matAutocomplete]="auto"
+    >
+    <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let address of filteredAddresses | async"
+                [value]="address.display_address"
+    >
+      {{address.display_name}}
+    </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <div class="buttons-row" style="margin: auto; width:90%; margin-bottom: 2vh;">
+  <mat-slide-toggle *ngIf="(location$ | async) as geo; else nolocation"
+                formControlName="useCurrentLocation"
+                color="primary"
+  >
+    Current location
+  </mat-slide-toggle>
+  <ng-template #nolocation>
+    Location service not allowed.
+  </ng-template>
+    <button mat-icon-button color="primary" style="margin: 10px 0;" (click)="inputFile.click()">
+      <mat-icon>add_a_photo</mat-icon>
+    </button>
+
+
+  </div>
+
+  <div class="buttons-row" style="margin-bottom: 2em;">
+    <button mat-stroked-button class="whole-width" (click)="cancel()">
+      <mat-icon>
+        clear
+      </mat-icon>
+      Cancel
+    </button>
+
+    <button [disabled]="group.invalid" mat-stroked-button class="whole-width" (click)="submit()">
+      <mat-icon>
+        save
+      </mat-icon>
+      Save
+    </button>
+  </div>
+  <input type="file" accept="image/*" (change)="upload($event)" multiple #inputFile style="display: none">
+
+  <div class="gallery">
+    <div class="gallery-item"  *ngFor="let image of images; let i = index;">
+      <img [src]="image | imagePipe | async" style="height: 100px; width: 100px;">
+      <div class="gallery-clear" (click)="removePicture(i)">x</div>
+    </div>
+  </div>
+</div>

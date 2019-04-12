@@ -1,0 +1,36 @@
+.task{
+	margin: 11rem auto 2rem 9rem;
+	max-width: 680px;
+
+	#currentTask{
+		//font-size: 1.25rem;
+	}
+}
+
+.status{
+	position: absolute;
+	top: 19%;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	text-align: center;
+	z-index: -1 ;
+	font-size: 8rem;
+	font-weight: bold;
+	-webkit-transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
+    opacity: 0;
+}
+
+.correct{
+	color: #00c853;
+}
+
+.wrong{
+	color: #f50057;
+}
+
+.taskShow{
+	opacity: 1;
+}

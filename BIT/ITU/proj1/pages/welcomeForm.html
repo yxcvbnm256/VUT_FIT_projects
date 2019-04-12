@@ -1,0 +1,37 @@
+<div class="row">
+	<div class="col s12">
+		<h2> Jak bude testování probíhat?</h2>
+		<ol class="instructions">
+			<li id="mainGoal"></li>
+			<li>Pro splnění úkolu se musíte dostat do položky menu, kde by se úkol vykonával. (úkoly tedy nebudou typu klikněte na položku menu "kontakt", nýbrž najděte kontaktní údaje firmy.) <strong>Úkol samotný je potom splněný kliknutím na položku menu</strong>, není třeba nic hledat na stránce.</li>
+			<li>Po splnění úkolu se generuje úkol další, tam postupujte stejně jako v předešlém kroku.</li>
+			<li><strong>V průběhu testu se vám 2x změní menu</strong>, budete tady testovat 3 různá menu.</li>
+			<li>Před začátkem Vás ještě poprosíme o vyplnění základních biometrických údajů, vše zůstává naprosto anonymní.</li>
+			<li>Finálně už se můžete pustit do testování.</li>
+		</ol>
+	</div>
+	<div class="col s12">
+		<h4>Pár informací o vás:</h4>
+		<form class="col s12"  id="personInfo">
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="age" type="number" class="validate" />
+					<label for="age">Věk</label>
+				</div>
+				<div class="input-field col s6 #303f9f">
+					<p>
+						<input name="gender" type="radio" id="male" value="m" />
+						<label for="male">Muž</label>									
+						<input name="gender" type="radio" id="female" value="f" />
+						<label for="female">Žena</label>
+					</p>
+				</div>
+			</div>									
+		</form>
+	</div>
+</div>
+<div class="row">
+	<div class="col s12">
+		<button type="submit" class="waves-effect waves-light btn pink btn-preventdef" onClick="startTest()">Rozumím, začněme</button>
+	</div>
+</div>

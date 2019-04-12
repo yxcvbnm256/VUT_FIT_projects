@@ -1,0 +1,22 @@
+{
+  "landing": {
+    "login": "Login",
+    "login-to-access": "Login to access jobs or ",
+    "login-button": "Login",
+    "login-failed": "Failed to login",
+    "login-subtitle": "login",
+    "register": "Register",
+    "register-to-access": "Register to access jobs or ",
+    "register-button": "Register",
+    "register-failed": "Failed to register",
+    "register-subtitle": "register",
+    "email": "Email",
+    "email-required": "Email is required",
+    "password": "Password",
+    "password-required": "Password is required",
+    "google-signin": "Sign in using Google",
+    "google-signup": "Sign up using Google",
+    "facebook-signin": "Sign in using Facebook",
+    "facebook-signup": "Sign up using Facebook"
+  }
+}

@@ -1,0 +1,15 @@
+<mat-card class="test-card">
+  <mat-card-content>
+    <form [formGroup]="usersForm">
+      <mat-form-field>
+        <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="userInput" [autocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredUsers | async" [value]="option">
+            {{option.display_name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card>
+

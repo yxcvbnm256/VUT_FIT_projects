@@ -1,0 +1,217 @@
+<mat-card *ngIf="job$ | async as job; else loading"
+          class="job-card"
+>
+  <div class="card-container">
+
+    <mat-tab-group mat-stretch-tabs [(selectedIndex)]="tabIndex">
+      <mat-tab label="Description">
+        <mat-list>
+          <mat-list-item>
+            <mat-icon color="primary" mat-list-icon>work</mat-icon>
+            <h4 mat-line>
+              Name
+            </h4>
+            <p class="value" mat-line>{{job.name}}</p>
+          </mat-list-item>
+
+          <mat-list-item (click)="selectUser(job.userID)">
+            <mat-icon color="primary" mat-list-icon>person</mat-icon>
+            <h4 mat-line>
+              User
+            </h4>
+            <p class="value link" mat-line>{{job.username}}</p>
+            <mat-icon>view</mat-icon>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon color="primary" mat-list-icon>description</mat-icon>
+            <h4 mat-line>
+              Description
+            </h4>
+            <p class="value" mat-line>{{job.description}}</p>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon color="primary" mat-list-icon>timelapse</mat-icon>
+            <h4 mat-line>
+              Valid to
+            </h4>
+            <p class="value" mat-line>{{job.dueTo.toDate() | date}}</p>
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+
+      <mat-tab label="Applicants" *ngIf="(jobRelation$ | async) === JobRelation.CREATED">
+        <div class="applicant-list">
+          <mat-list>
+            <mat-list-item *ngFor="let applicant of applicants$ | async">
+              <div class="applicant-row">
+                <h4 (click)="selectUser(applicant.userId)" style="text-decoration: underline">{{applicant.username}} </h4>
+                <div class="applicant-buttons">
+                  <div class="applicant-buttons" *ngIf="job.status === JobStatus.PUBLISHED">
+                    <button mat-icon-button color="primary" *ngIf="applicant.status !== ApplicantStatus.CORFIRMED"
+                            (click)="confirm(applicant.userId)">
+                      <mat-icon>check</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" *ngIf="applicant.status !== ApplicantStatus.REJECTED"
+                            (click)="reject(applicant.userId)">
+                      <mat-icon>clear</mat-icon>
+                    </button>
+                  </div>
+                  <button mat-stroked-button
+                          *ngIf="job.status === JobStatus.DONE"
+                          (click)="rateUser(job, applicant.userId, applicant.username)">
+                    <mat-icon>star_rate</mat-icon>
+                    Rating
+                  </button>
+                </div>
+              </div>
+            </mat-list-item>
+          </mat-list>
+
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <div class="buttons-row" style="margin-top: 1em;">
+      <button *ngIf="canDelete$ | async"
+              class="whole-width"
+              mat-stroked-button
+              (click)="deleteJob()"
+      >
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+      <button class="whole-width"
+              *ngIf="canApply$ | async"
+              mat-stroked-button
+              (click)="applyForJob()">
+        <mat-icon>accessibility</mat-icon>
+        Apply for the job
+      </button>
+
+      <button class="whole-width"
+              *ngIf="jobApplied$ | async"
+              mat-stroked-button
+              (click)="discardJob()">
+        <mat-icon>pan_tool</mat-icon>
+        Cancel the application
+      </button>
+      <button mat-stroked-button class="whole-width" *ngIf="jobConfirm$ | async" (click)="confirmJob()">
+        <mat-icon>check</mat-icon>
+        Confirm applicants
+      </button>
+      <button mat-stroked-button class="whole-width" *ngIf="jobDone$ | async" (click)="finishJob()">
+        <mat-icon>done_all</mat-icon>
+        Mark as done
+      </button>
+      <button mat-stroked-button class="whole-width" *ngIf="applicationAccepted$ | async" (click)="selectUser(job.userID, true)">
+        <mat-icon>thumb_up</mat-icon>
+        Accepted - Contact info
+      </button>
+      <button mat-stroked-button disableRipple class="whole-width" *ngIf="applicationRejected$ | async">
+        <mat-icon>block</mat-icon>
+        Application rejected
+      </button>
+      <button mat-stroked-button class="whole-width" *ngIf="rate$ | async" (click)="rateUser(job, job.userID, job.username)">
+        <mat-icon>star_rate</mat-icon>
+        Rate {{job.username}}
+      </button>
+    </div>
+
+    <div class="gallery" *ngIf="tabIndex === 0 && job.images && job.images?.length !== 0">
+      <div class="arrow left">
+        <button mat-icon-button (click)="toRight()">
+          <mat-icon style="color: white">keyboard_arrow_left</mat-icon>
+        </button>
+      </div>
+      <div class="arrow right">
+        <button mat-icon-button (click)="toLeft(job.images)">
+          <mat-icon style="color: white">keyboard_arrow_right</mat-icon>
+        </button>
+      </div>
+      <div class="ball-sack">
+        <div class="ball" *ngFor="let item of job.images; let i = index;"
+             (click)="setShift(i)"
+             [ngClass]="{'selected' : shift === i}"></div>
+      </div>
+      <div class="gallery-container" [style.left.%]="shift*-100" (swipeleft)="toLeft(job.images)" (swiperight)="toRight()"
+           (click)="galleryVisible = true;">
+        <div class="gallery-item" *ngFor="let item of job.images;" [style.backgroundImage]="item | imageUrl | async"></div>
+      </div>
+
+    </div>
+
+  </div>
+</mat-card>
+
+<ng-template #loading>
+  <mat-card class="job-card">
+    <div class="card-container">
+      <mat-list>
+        <mat-list-item>
+          <mat-icon color="primary" mat-list-icon>work</mat-icon>
+          <h4 mat-line>
+            Name
+          </h4>
+          <p class="value" mat-line>...</p>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon color="primary" mat-list-icon>person</mat-icon>
+          <h4 mat-line>
+            User
+          </h4>
+          <p class="value" mat-line>...</p>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon color="primary" mat-list-icon>description</mat-icon>
+          <h4 mat-line>
+            Description
+          </h4>
+          <p class="value" mat-line>...</p>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon color="primary" mat-list-icon>timelapse</mat-icon>
+          <h4 mat-line>
+            Valid to
+          </h4>
+          <p class="value" mat-line>...</p>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card>
+</ng-template>
+
+<div class="gallery-show" style="background-color: black; position: absolute; top: 0; left: 0; z-index:  9999;  height: 100%; width: 100%;"
+     *ngIf="galleryVisible">
+  <ng-container *ngIf="job$ | async as job">
+    <div class="close">
+      <button mat-icon-button (click)="galleryVisible = false">
+        <mat-icon style="color: white">clear</mat-icon>
+      </button>
+    </div>
+    <div class="arrow left">
+      <button mat-icon-button (click)="toRight()">
+        <mat-icon style="color: white">keyboard_arrow_left</mat-icon>
+      </button>
+    </div>
+    <div class="arrow right">
+      <button mat-icon-button (click)="toLeft(job.images)">
+        <mat-icon style="color: white">keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
+    <div class="ball-sack" style="position: absolute">
+      <div class="ball" *ngFor="let item of job.images; let i = index;"
+           (click)="setShift(i)"
+           [ngClass]="{'selected' : shift === i}"></div>
+    </div>
+    <div class="gallery-container" [style.left.%]="shift*-100" (swipeleft)="toLeft(job.images)" (swiperight)="toRight()"
+         (click)="galleryVisible = true;">
+      <div class="gallery-item" style="background-size: contain;" *ngFor="let item of job.images;"
+           [style.backgroundImage]="item | imageUrl | async"></div>
+    </div>
+  </ng-container>
+</div>
+

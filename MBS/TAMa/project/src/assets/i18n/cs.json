@@ -1,0 +1,22 @@
+{
+  "landing": {
+    "login": "Přihlášení",
+    "login-to-access": "K přístupu k nabídkám se přihlaste nebo ",
+    "login-button": "Přihlásit se",
+    "login-failed": "Nepodařilo se přihlásit",
+    "login-subtitle": "přihlaste",
+    "register": "Registrace",
+    "register-to-access": "K přístupu k nabídkám se zaregistrujte nebo ",
+    "register-button": "Zaregistrovat se",
+    "register-failed": "Nepodařilo se zaregistrovat",
+    "register-subtitle": "zaregistrujte",
+    "email": "E-mail",
+    "email-required": "E-mail je povinný",
+    "password": "Heslo",
+    "password-required": "Heslo je povinné",
+    "google-signin": " Přihlásit se přes Google",
+    "google-signup": " Zaregistrovat se přes Google",
+    "facebook-signin": " Přihlásit se přes Facebook",
+    "facebook-signup": " Registrovat se přes Facebook"
+  }
+}

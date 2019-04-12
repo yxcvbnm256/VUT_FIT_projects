@@ -1,0 +1,226 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+  <img class="logo"
+       src="../../assets/icons/new-design/icons8-bottom-512.png"
+       alt="logo"
+  >
+  <span class="toolbar-title">SexyJobs</span>
+</mat-toolbar>
+
+<div fxLayout="column" fxLayoutAlign="center center" class="login-card-container">
+  <mat-card *ngIf="(formState$ | async ) === FormState.Login; else register" class="login-card">
+    <mat-card-title>
+      <span [translate]="'landing.login'">
+        Login
+      </span>
+    </mat-card-title>
+
+    <mat-card-subtitle>
+        <span [translate]="'landing.login-to-access'">
+          Login to access jobs or
+        </span>
+        <button class="link-button"
+                (click)="switchToRegister()"
+                [translate]="'landing.register-subtitle'"
+        >
+          register
+        </button>
+    </mat-card-subtitle>
+
+    <mat-card-content>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxLayout="column"
+             fxLayoutAlign="center center"
+             class="login-form-container"
+        >
+          <form class="login-form" [formGroup]="loginGroup" (submit)="loginWithPassword()">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'landing.email' | translate}}</mat-label>
+              <input matInput
+                     class="login-input"
+                     formControlName="login"
+                     required
+              >
+              <mat-error *ngIf="loginGroup.controls.login.invalid">
+                {{ 'email-required' | translate }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input matInput
+                     class="password-input"
+                     formControlName="password"
+                     type="password"
+                     required
+              >
+              <mat-error *ngIf="loginGroup.controls.password.invalid">
+                {{ 'password-required' | translate }}
+              </mat-error>
+            </mat-form-field>
+            <div>
+              <div fxLayout="row"
+                   fxLayoutAlign="end right"
+                   class="form-submit-container"
+              >
+                <button mat-stroked-button
+                        class="whole-width"
+                        type="submit"
+                        [disabled]="loginGroup.invalid"
+                >
+                  <mat-icon>exit_to_app</mat-icon>
+                  <span [translate]="'landing.login-button'">Login</span>
+                </button>
+              </div>
+            </div>
+            <div class="login-submit-error"
+                 fxLayout="row"
+                 fxLayoutAlign="center center"
+                 [translate]="'landing.login-failed'"
+                 *ngIf="failedToSubmit$ | async"
+            >
+              Failed to login
+            </div>
+          </form>
+        </div>
+
+        <div class="line"></div>
+
+        <div fxLayout="row" fxLayoutAlign="center center" class="google-login-container">
+          <button mat-stroked-button
+                  class="google-login-button"
+                  (click)="loginWithGoogle()">
+            <img src="assets/icons/social/google.svg" alt="google-icon" class="google-icon">
+            <span [translate]="'landing.google-signin'">
+              Sign in using Google
+            </span>
+          </button>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="facebook-login-container" >
+          <button mat-stroked-button
+                  class="facebook-login-button"
+                  (click)="loginWithFacebook()"
+          >
+            <img src="assets/icons/social/facebook.svg" alt="facebook-icon" class="fb-icon">
+            <span [translate]="'landing.facebook-signin'">
+              Sign in using Facebook
+            </span>
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #register>
+    <mat-card class="login-card">
+      <mat-card-title>
+        <span [translate]="'landing.register'">
+          <mat-icon>person_add</mat-icon>
+          Register
+        </span>
+      </mat-card-title>
+
+      <mat-card-subtitle>
+        <span [translate]="'landing.register-to-access'">
+          Register to access jobs or
+        </span>
+        <button class="link-button"
+                (click)="switchToLogin()"
+                [translate]="'landing.login-subtitle'"
+        >
+          login
+        </button>
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <div fxLayout="column"
+               fxLayoutAlign="center center"
+               class="login-form-container"
+          >
+            <form class="login-form" [formGroup]="registerGroup" (submit)="registerWithPassword()">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'landing.email' | translate }}</mat-label>
+                <input matInput
+                       class="login-input"
+                       formControlName="email"
+                       required
+                >
+                <mat-error *ngIf="registerGroup.controls.email.invalid">
+                  {{ 'landing.email-required' | translate }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'landing.password' | translate }}</mat-label>
+                <input matInput
+                       class="password-input"
+                       formControlName="password"
+                       type="password"
+                       required
+                >
+                <mat-error *ngIf="registerGroup.controls.password.invalid">
+                  {{ 'landing.pasword-required' | translate }}
+                </mat-error>
+              </mat-form-field>
+              <div>
+                <div fxLayout="row"
+                     fxLayoutAlign="end right"
+                     class="form-submit-container"
+                >
+                  <button mat-stroked-button
+                          class="login-button"
+                          type="submit"
+                          [disabled]="registerGroup.invalid">
+                    <mat-icon>person_add</mat-icon>
+                      <span [translate]="'landing.register-button'">
+                        Register
+                      </span>
+                  </button>
+                </div>
+              </div>
+              <div class="login-submit-error"
+                   fxLayout="row"
+                   fxLayoutAlign="center center"
+                   *ngIf="failedToSubmit$ | async"
+                   [translate]="'landing.register-failed'"
+              >
+                Failed to register
+              </div>
+            </form>
+          </div>
+
+          <div class="line"></div>
+
+          <div fxLayout="row" fxLayoutAlign="center center" class="google-login-container">
+            <button mat-stroked-button
+                    class="google-login-button"
+                    (click)="loginWithGoogle()">
+              <img src="assets/icons/social/google.svg" alt="google-icon" class="google-icon">
+              <span [translate]="'landing.google-signup'">
+                Sign up using Google
+              </span>
+            </button>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center" class="facebook-login-container" >
+            <button mat-stroked-button
+                    class="facebook-login-button"
+                    (click)="loginWithFacebook()"
+            >
+              <img src="assets/icons/social/facebook.svg" alt="facebook-icon" class="fb-icon">
+              <span [translate]="'landing.facebook-signup'">
+                Sign up using Facebook
+              </span>
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>
+
+<button *ngIf="pwa.promptEvent"
+        mat-fab
+        (click)="installPwa()"
+        class="add-button">
+  <mat-icon aria-label="Add to Homescreen button">arrow_downward</mat-icon>
+</button>

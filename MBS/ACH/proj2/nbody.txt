@@ -1,0 +1,71 @@
+﻿Architektura procesorů (ACH 2018)
+Projekt č.2 (CUDA)
+Login: xpawlu00
+
+
+Krok 0: základní implementace
+=============================
+vláken/blok    čas [s]
+32             36.93
+64             18.79
+128            18.78
+256            18.81
+512            18.94
+1024           19.67
+
+Ideální počet vláken na blok: 128
+
+
+Krok 1: optimalizace kódu
+=====================
+Došlo ke zrychlení? Ano
+
+Popište dva hlavní důvody:
+
+1) V kroku 0 bylo třeba načítat v každém kernelu částice z globální paměti, spojením do jednoho kernelu se načítání z globální paměti zredukovalo (3 kernely vs. 1)
+2) Odpadla nutnost pracovat s pomocnou strukturou velocity -> další redukce přístupu do globální paměti
+
+Porovnejte metriky s předchozím krokem:
+
+Multiprocessor activity - (59.68 %, 61.11 %, 22.44 %) vs. 99 % 
+Global load transactions - 8 390 656 vs. 14 432 256
+FLOP efficiency - (4.39 %, 6.23 %, 0.11 %) vs. 7.86 %
+
+Hodnoty v závorkách znamenají hodnoty metrik v jednotlivých kernelech.
+Hlavním rozdílem je tedy snížení přístupů do globální paměti, od čehož se odvíjí i efektivita multiprocesoru a jiné.
+
+
+Krok 2: sdílená paměť
+=====================
+Došlo ke zrychlení? Ano
+
+Zdůvodnete:
+
+Využitím sdílené paměti se výrazně omezil přístup do globální paměti (latence přístupu do sdílené paměti je mnohonásobně nižší, než do globální)
+
+Porovnejte metriky s předchozím krokem:
+Multiprocessor activity - 99 % vs. 99 %
+Global load transactions - 14 432 256 vs. 133 120
+FLOP efficiency - 7.86 % vs. 9.2 %
+
+
+Krok 3: analýza výkonu
+======================
+N        čas CPU [s]    čas GPU [s]    propustnost paměti [MB/s]    výkon [MFLOPS]    zrychlení [-]
+1024     9.91           1.09           278                          374               9.09x
+2048     39.41          2.18           508                          985               18.08x
+4096     158.87         4.44           949                          2356              35.78x
+8192     637.4          8.93           1824                         3878              71.37x
+16384    2549.6         20.23          3168                         5107              126x
+32768    10198          88.84          2998                         5046              114x
+65536    40792          352            2991                         4941              115x
+131072   163168         1240           3335                         metric overflow   131x
+
+Od jakého počtu částic se vyplatí počítat na grafické kartě?
+
+Čas na CPU byl počítán na nevektorizované verzi, a pokud budu počítat, že paralelní výpočet přinese zrychlení cca 10x, vychází, že u 1024 prvků se ještě těsně vyplatí počítat na CPU, od 2048 prvků už ale vítězí GPU.
+
+Ze zadání nevyplynulo, zda máme do sloupce zrychlení zapsat zrychlení oproti paralelní verzi, která má být cca 10x rychlejší, nebo sekvenční. Zvolil jsem tedy zrychlení oproti sekvenční verzi, pro zrychlení oproti paralelní je třeba hodnotu vydělit deseti.
+
+Od 16384 prvků jsem již čas CPU pouze odhadoval, jelikož výpočet sekvenční verze začal trvat dlouhou dobu.
+===================================

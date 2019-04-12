@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//CZ" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<title>ITU - Testování menu</title>
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+		<script src="scripts/main.js"></script>
+		<!--Import Google Icon Font-->
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+		<!--Import materialize.css-->
+		<link type="text/css" rel="stylesheet" href="css/style.css"media="screen,projection"/>
+		<!--Import jQuery before materialize.js-->
+		<script src="js/materialize.min.js"></script>
+
+	</head>
+	<body id="stats">
+		<script type="text/javascript">
+
+			function getFeedback(){
+				$.getJSON("feedback.json", function(data) {
+					console.log(data.length);
+
+					var html = "";
+					// for(honza in data){
+					// 	html += "<p>";
+					// 	html += honza;
+					// 	html += "</p>";
+					// }
+
+					for (var i = data.length - 1; i >= 0; i--) {
+
+						html += ""i
+						html += "<p>";
+						html += data[i];
+						html += "</p>";
+					}
+
+					$("#feedback").append(html);
+
+				});
+
+			};
+
+			$(document).ready( function() {
+				getFeedback();
+			});
+
+		</script>
+
+		<div class="container" id="main">
+			<div id="feedback">
+
+			</div>
+			
+		</div>
+	</body>
+</html>

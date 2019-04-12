@@ -1,0 +1,85 @@
+\documentclass[12pt]{article}
+\usepackage{xltxtra} 
+
+
+% \usepackage{avant}
+% \usepackage{bookman}
+% \usepackage{helvet}  %chybí tuèný øez u strojového písma
+% \usepackage{newcent}
+% \usepackage{palatino}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\renewcommand{\figurename}{Figure}
+
+\usepackage[labelsep=endash]{caption}
+
+\usepackage[bookmarksopen,colorlinks,plainpages=false,urlcolor=blue]{hyperref}
+\usepackage{url}
+\usepackage{ifpdf}
+\usepackage{indentfirst}
+
+% \ifthenelse{\isundefined{\pdfoutput}}
+\ifpdf
+  \usepackage[dvipdf]{graphicx}
+\else
+  \usepackage[dvips]{graphicx}
+\fi
+
+\usepackage[top=2cm, left=2cm, text={17cm, 26cm}, ignorefoot]{geometry}
+
+\begin{document}
+
+\section{Rozbor a analýza algoritmu}
+
+\subsection{Časová složitost}
+
+Vzhledem k tomu, že algoritmus \textit{Euler tour} popsaný ve studijních materiálech nebere v potaz prvotní distribuci hran mezi procesory (stejně tak jako distribuci vah po skončení \textit{parallel suffix sum}), nebudu v rozboru analýzy algoritmu tyto části zohledňovat, aby bylo možné algoritmus teoreticky a prakticky porovnat. Počet procesorů se rovná počtu zpětných a dopředných hran ve stromě, což pro $n$ prvků znamená $2 \cdot n - 2$ procesorů.
+
+Každý procesor paralelně na základě \textit{adjecency list} a funkcí \textit{next} zjistí následníka v \textit{Euler tour}. Časová složitost je konstantní, tedy
+$$ O(1). $$
+
+Následně proběhne algoritmus \textit{parallel suffix sum}, který obsahuje pro každý procesor sekvenční cyklus. První prvek v seznamu se na konec seznamu dostane v logaritmickém čase, složitost je tedy 
+$$ O(\log (2\cdot n - 2)).$$ 
+
+Poté proběhne korekce výsledků v konstantním čase. Celkově tedy algoritmus \textit{přiřazení pořadí preorder vrcholů} proběhne v logaritmickém čase, tedy
+$$ O(\log (2\cdot n - 2)). $$
+
+
+\subsection{Prostorová složitost}
+
+Na začástku algoritmu je třeba uchovat pole všech hran a pole následníků \textit{succ}, dále v případě \textit{Euler tour} navíc \textit{adjecency list}, který počítá s polem o dvou prvcích (a případně s ukazatelem do dalšího pole) pro každou dopřednou i zpětnou hranu. Nakonec u algoritmu \textit{suffix sum} je třeba vytvořit nové pole pro všechny hrany. Každá z těchto složitostí je lineární, celkově má tedy algoritmus lineární prostorovou složitost, a to
+$$ O(2\cdot n - 2). $$
+
+\subsection{Celková cena}
+
+Cena algoritmu se spočítá jako časová složitost krát počet procesorů, v případě \textit{přiřazení pořadí preorder vrcholů} tedy
+$$ O((\log (2 \cdot n - 2))\cdot (2 \cdot n - 2)). $$
+Zda je algoritmus optimální se určí porovnáním s časovou složitostí ideálního sekvenčního algoritmu pro \textit{preorder} průchod stromem. Vzhledem k tomu, že pro průchod \textit{preorder} existuje algoritmus s lineární časovou složitostí $O(n)$, je jasné, že tento algoritmus nelze označit za optimální.
+
+\newpage
+\section{Implementace}
+
+Vzhledem k tomu, že po spuštění programu má každý procesor přístup ke vstupnímu stromu, si každý sám, tedy paralelně, přiřadí jednu hranu stromu. Při tomto přiřazení si také každý procesor uchovává data o tom, který procesor získal kterou hranu. Tato informace je uložena ve struktuře \verb|std::map|.
+
+Dalším krokem je zjištění další hrany v \textit{Euler tour}. Jelikož ve studijních materiálech je k tomuto kroku využita sdílená paměť, kterou ale ve své implementaci nepoužívám, byl tento krok implementován jinak (spojuje dohromady funkce \textit{adjecency list} a \textit{next}). Jelikož má každý procesor přístup ke vstupnímu stromu, dokáže si další hranu v cestě spočítat bez komunikace se sdílenou pamětí, respektive bez komunikace s ostatními procesory. Tímto je pro tento krok správně docíleno konstantní časové složitosti.
+
+K implementaci \textit{suffix sum} ale má implementace počítá s tím, že že každý procesor musí znát i vlastníka následující hrany v \textit{Euler tour} - zde je využito uložení informace o tom, který procesor spravuje kterou hranu. Každý procesor se tedy podívá do \verb|std::map| a přiřadí následníka v \textit{Euler tour} s \textit{rankem} procesoru. Nalezení v \verb|std::map| má dle standardu \verb|C++| logaritmickou časovou složitost. Posledním předzpracováním před samotným \textit{suffix sum} je otočení pořadí procesorů v cestě - každý procesor zašle svůj \textit{rank} svému následníku a čeká na zprávu od předchůdce. Tím je zajištěno, že poslední procesor v cestě bude nést \textit{rank} 0.
+
+Následně proběhně algoritmus \textit{suffix sum} ve stejné formě, jako ve studijních materiálech - s tím rozdílem, že poslední procesor (v mém případě \textit{rank} 0) neposlouchá a ani nic neposílá. Tedy jakmile kterýkoliv procesor ukazuje na \textit{rank} 0, nepožaduje žádná data a rovnou si přičte váhu 0. Jedině tak lze u tohoto algoritmu dosáhnout logaritmické časové složitosti bez sdílené paměti, jelikož pokud by měl procesor s \textit{rankem} 0 poslouchat a odpovídat na každý požadavek o váhu, časová složitost by rostla exponenciálně (první cyklus poslouchá jedenkrát, druhý dvakrát, třetí cyklus čtyřikrát atd.).
+
+
+\section{Experimenty}
+
+Testování proběhlo na systému \textit{merlin}. Čas byl měřen od konce distribuce hran až po ukončení \textit{suffix sum} (tak, aby složitost odpovídala teoreticky popsané složitosti výše), přičemž pro každý počet prvků bylo provedeno pět měření, která byla do výsledného grafu zprůměrována. K měření času byl použit rozdíl vestavěné funkce knihovny \textit{MPI} - \verb|MPI_Wtime()|.
+
+Očekávanou logaritmickou složitost se mi nepodařilo naměřit, pravděpodobně kvůli vytížení systému \textit{merlin} a počtu fyzických jader. Každopádně od určitého bodu graf logaritmus trochu připomínat začal.
+
+\newpage
+\section{Komunikační protokol}
+Komunikační protokol mezi procesory znázorňuje níže přiložený sekvenční diagram, který ukazuje obecnou komunikaci mezi procesory v průběhu algoritmu \textit{suffix sum}. Tedy pokud určitý procesor požaduje váhu svého následníka, zašle mu požadavek (zároveň se speciálním flagem \textit{doNotListen}, který říká, zda má daný procesor další cyklus naslouchat svému předchůdci ohledně své váhy) a očekává odpověď v podobě váhy a dalšího následníka.
+
+\vspace{15cm}
+\section{Závěr}
+Jak již bylo zmíněno, výsledky algoritmu úplně nedokazují jeho logaritmickou časovou složitost, pravděpodobně díky fyzickým vlastnostem testovacího systému a zároveň jeho vytížení. Teoreticky by však má implementace logaritmické časové složitosti dosahovat měla. 
+\end{document}

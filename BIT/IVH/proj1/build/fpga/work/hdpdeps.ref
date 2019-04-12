@@ -1,0 +1,108 @@
+V3 53
+FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/build/fpga/sid_config.vhd 2014/06/02.15:47:06 P.20131013
+PH work/fpga_cfg 1401719617 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/build/fpga/sid_config.vhd \
+      PB work/clkgen_cfg 1401719605
+PB work/fpga_cfg 1401719618 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/build/fpga/sid_config.vhd \
+      PH work/fpga_cfg 1401719617
+FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/engen.vhd 2011/04/20.20:50:14 P.20131013
+EN work/engen 1401719621 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/engen.vhd \
+      PB ieee/std_logic_1164 1381692176 PB ieee/std_logic_arith 1381692177 \
+      PB ieee/STD_LOGIC_UNSIGNED 1381692179
+AR work/engen/main 1401719622 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/engen.vhd \
+      EN work/engen 1401719621
+FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/sid6581.vhd 2014/06/02.16:29:51 P.20131013
+EN work/sid6581 1401719619 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/sid6581.vhd \
+      PB ieee/std_logic_1164 1381692176 PB ieee/STD_LOGIC_UNSIGNED 1381692179 \
+      PB ieee/NUMERIC_STD 1381692181 PB ieee/std_logic_arith 1381692177
+AR work/sid6581/Behavioral 1401719620 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/sid6581.vhd \
+      EN work/sid6581 1401719619 CP voice_gen
+FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/top.vhd 2012/04/19.16:17:08 P.20131013
+AR work/tlv_gp_ifc/main 1401719623 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/top.vhd \
+      EN work/tlv_gp_ifc 1401719616 PB ieee/std_logic_1164 1381692176 \
+      PB ieee/STD_LOGIC_UNSIGNED 1381692179 PB ieee/NUMERIC_STD 1381692181 \
+      PB ieee/std_logic_arith 1381692177 CP SPI_adc CP sid6581 CP work/engen
+FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/voice_gen.vhd 2014/06/02.16:33:19 P.20131013
+EN work/voice_gen 1401719606 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/voice_gen.vhd \
+      PB ieee/std_logic_1164 1381692176 PB ieee/STD_LOGIC_UNSIGNED 1381692179 \
+      PB ieee/NUMERIC_STD 1381692181 PB ieee/std_logic_arith 1381692177
+AR work/voice_gen/Behavioral 1401719607 \
+      FL C:/Users/Honza/Documents/FITkit1/apps/demo/projekt/fpga/voice_gen.vhd \
+      EN work/voice_gen 1401719606
+FL C:/Users/Honza/Documents/FITkit1/fpga/chips/architecture_gp/arch_gp_ifc.vhd 2009/02/07.16:52:52 P.20131013
+AR work/fpga/arch_gp_ifc 1401719624 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/chips/architecture_gp/arch_gp_ifc.vhd \
+      EN work/fpga 1401719611 CP work/clkgen CP SPI_ctrl CP tlv_gp_ifc \
+      PB work/clkgen_cfg 1401719605 PB work/fpga_cfg 1401719618
+FL C:/Users/Honza/Documents/FITkit1/fpga/chips/architecture_gp/tlv_gp_ifc.vhd 2009/02/07.16:52:52 P.20131013
+EN work/tlv_gp_ifc 1401719616 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/chips/architecture_gp/tlv_gp_ifc.vhd \
+      PB ieee/std_logic_1164 1381692176
+FL C:/Users/Honza/Documents/FITkit1/fpga/chips/fpga_xc3s50.vhd 2009/02/07.16:52:52 P.20131013
+EN work/fpga 1401719611 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/chips/fpga_xc3s50.vhd \
+      PB ieee/std_logic_1164 1381692176
+FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_adc.vhd 2009/02/07.16:52:52 P.20131013
+AR work/SPI_adc/basic 1401719629 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_adc.vhd \
+      EN work/SPI_adc 1401719608 PB ieee/std_logic_1164 1381692176 \
+      PB ieee/std_logic_arith 1381692177 PB ieee/STD_LOGIC_UNSIGNED 1381692179 \
+      PB work/math_pack 1401719610
+FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_adc_autoincr.vhd 2009/02/07.16:52:52 P.20131013
+AR work/SPI_adc/autoincrement 1401719628 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_adc_autoincr.vhd \
+      EN work/SPI_adc 1401719608 PB ieee/std_logic_1164 1381692176 \
+      PB ieee/std_logic_arith 1381692177 PB ieee/STD_LOGIC_UNSIGNED 1381692179 \
+      PB work/math_pack 1401719610
+FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_adc_entity.vhd 2009/02/07.16:52:52 P.20131013
+EN work/SPI_adc 1401719608 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_adc_entity.vhd \
+      PB ieee/std_logic_1164 1381692176
+FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_ctrl.vhd 2009/02/07.16:52:52 P.20131013
+EN work/SPI_ctrl 1401719614 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_ctrl.vhd \
+      PB ieee/std_logic_1164 1381692176 PB ieee/std_logic_arith 1381692177 \
+      PB ieee/STD_LOGIC_UNSIGNED 1381692179
+AR work/SPI_ctrl/Arch_SPI_ctrl2 1401719615 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_ctrl.vhd \
+      EN work/SPI_ctrl 1401719614
+FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_reg.vhd 2014/04/08.16:19:02 P.20131013
+PH work/spi_cfg 1401719625 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_reg.vhd \
+      PB ieee/std_logic_1164 1381692176 PB ieee/std_logic_arith 1381692177
+EN work/SPI_reg 1401719626 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_reg.vhd \
+      PB ieee/std_logic_1164 1381692176 PB ieee/std_logic_arith 1381692177 \
+      PB ieee/STD_LOGIC_UNSIGNED 1381692179
+AR work/SPI_reg/beh 1401719627 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/ctrls/spi/spi_reg.vhd \
+      EN work/SPI_reg 1401719626 CP SPI_adc
+FL C:/Users/Honza/Documents/FITkit1/fpga/units/clkgen/clkgen.vhd 2009/02/07.16:52:52 P.20131013
+EN work/clkgen 1401719612 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/units/clkgen/clkgen.vhd \
+      PB ieee/std_logic_1164 1381692176 PB ieee/NUMERIC_STD 1381692181 LB UNISIM \
+      PH unisim/VCOMPONENTS 1381692182 PB work/clkgen_cfg 1401719605
+AR work/clkgen/BEHAVIORAL 1401719613 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/units/clkgen/clkgen.vhd \
+      EN work/clkgen 1401719612 CP BUFG CP IBUFG CP DCM
+FL C:/Users/Honza/Documents/FITkit1/fpga/units/clkgen/clkgen_config.vhd 2009/02/07.16:52:52 P.20131013
+PH work/clkgen_cfg 1401719604 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/units/clkgen/clkgen_config.vhd \
+      PB ieee/std_logic_1164 1381692176 PB ieee/std_logic_arith 1381692177
+PB work/clkgen_cfg 1401719605 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/units/clkgen/clkgen_config.vhd \
+      PH work/clkgen_cfg 1401719604
+FL C:/Users/Honza/Documents/FITkit1/fpga/units/math/math_pack.vhd 2009/02/07.16:52:52 P.20131013
+PH work/math_pack 1401719609 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/units/math/math_pack.vhd \
+      PB ieee/std_logic_1164 1381692176
+PB work/math_pack 1401719610 \
+      FL C:/Users/Honza/Documents/FITkit1/fpga/units/math/math_pack.vhd \
+      PH work/math_pack 1401719609

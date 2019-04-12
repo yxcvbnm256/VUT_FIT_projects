@@ -1,0 +1,7 @@
+INFILE=C:\Users\Honza\Documents\FITkit1\apps\demo\projekt\build\fpga\sid.par.ncd
+OUTFILE=C:\Users\Honza\Documents\FITkit1\apps\demo\projekt\build\sid.bit
+FAMILY=Spartan3
+PART=xc3s50-4pq208
+WORKINGDIR=C:\Users\Honza\Documents\FITkit1\apps\demo\projekt\build
+LICENSE=WebPack
+USER_INFO=210882050_0_0_178

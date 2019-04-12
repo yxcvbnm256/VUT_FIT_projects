@@ -1,0 +1,17 @@
+# ignore object files
+*.o
+.~*
+ifj2014
+stats.sh
+generateRuleTable
+ruleTable.out
+generate
+scanner
+*.gch
+xjanou15.zip
+*~
+tests/*
+valgrind
+test
+test.out
+projekt

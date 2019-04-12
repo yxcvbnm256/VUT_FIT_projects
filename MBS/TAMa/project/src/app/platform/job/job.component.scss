@@ -1,0 +1,137 @@
+@import "../../shared/styles/variables";
+
+.value{
+  white-space: normal !important;
+}
+
+.apply-button{
+  width: 100%;
+  position: fixed;
+  bottom: 0 ;
+  border-radius: 0;
+  z-index: 999;
+}
+
+.delete-button{
+  width: 100%;
+  position: fixed;
+  bottom: 0 ;
+  border-radius: 0;
+  z-index: 999;
+}
+
+.galery{
+  //width:95%;
+  height: 300px;
+  /deep/.container{
+  height: 300px !important;
+  }
+
+  /deep/.item-carousel{
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none !important;
+    border-radius: 10px;
+  }
+}
+
+.gallery{
+  width: 100%;
+  height: 200px;
+  position: relative;
+}
+
+.gallery-container{
+  display: flex;
+  height: 100%;
+  position: relative;
+  transition: left .3s;
+}
+
+.gallery-item{
+  min-width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.arrow{
+  position: absolute;
+  top: 48%;
+  z-index: 10;
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 50%;
+
+  &.left{
+    left: 3%;
+  }
+
+  &.right{
+    right: 3%;
+  }
+}
+
+.close{
+  position: absolute;
+  top: 3%;
+  z-index: 10;
+  right: 3%;
+  color: white;
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 50%;
+}
+
+.ball-sack{
+  position: relative;
+  width: 100%;
+  z-index: 10;
+  top: 90%;
+  display: flex;
+  justify-content: center;
+
+  .ball{
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    margin-left: 10px;
+    background-color: white;
+
+    &.selected{
+      background-color: orange;
+    }
+  }
+}
+
+.applicant-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.applicant-buttons{
+  display: flex;
+}
+
+.applicant-approval{
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+}
+
+.job-card {
+  border-radius: 0;
+  max-height: calc(100% - 56px);
+  top: $toolbar-height;
+  //padding: 0 0 20px 0;
+}
+
+.card-container {
+  height: calc(100% - 36px);
+  padding-bottom: 20px;
+}
+
+.link {
+  text-decoration: underline;
+}

@@ -1,0 +1,108 @@
+\documentclass[12pt]{article}
+\usepackage{xltxtra} 
+
+
+% \usepackage{avant}
+% \usepackage{bookman}
+% \usepackage{helvet}  %chybí tuèný øez u strojového písma
+% \usepackage{newcent}
+% \usepackage{palatino}
+
+\renewcommand{\figurename}{Figure}
+
+\usepackage[labelsep=endash]{caption}
+
+\usepackage[bookmarksopen,colorlinks,plainpages=false,urlcolor=blue]{hyperref}
+\usepackage{url}
+\usepackage{ifpdf}
+\usepackage{indentfirst}
+
+% \ifthenelse{\isundefined{\pdfoutput}}
+\ifpdf
+  \usepackage[dvipdf]{graphicx}
+\else
+  \usepackage[dvips]{graphicx}
+\fi
+
+\usepackage[top=2cm, left=2cm, text={17cm, 26cm}, ignorefoot]{geometry}
+
+\begin{document}
+\begin{titlepage}
+
+% \vspace*{1cm}
+\begin{center}
+\begin{LARGE}
+VYSOKÉ UČENÍ TECHNICKÉ V BRNĚ \\
+
+
+\end{LARGE}
+\begin{Large}
+Fakulta informačních technologií
+\end{Large}
+\end{center}
+
+\vfill
+\vspace{4cm}
+\begin{center}
+\begin{Large}
+Bezpečnost informačních systémů \\
+\end{Large}
+\bigskip
+\begin{Huge}
+Program pro detekci spamu v e-mailové komunikaci\\
+\end{Huge}
+\end{center}
+
+\vfill
+
+\begin{center}
+\begin{Large}
+\today
+\end{Large}
+\end{center}
+
+\vfill
+
+\begin{flushleft}
+\begin{large}
+\begin{tabular}{ll}
+Autor: & Jan Pawlus, \url{xpawlu00@stud.fit.vutbr.cz} \\ 
+\end{tabular}
+\end{large}
+\end{flushleft}
+\end{titlepage}
+
+\newpage
+
+\section{Princip funkčnosti} \pagestyle{myheadings}\pagenumbering{arabic}\setcounter{page}{1}
+
+Můj e-mailový filtr je složen ze tří modulů - \verb|bis.py|, kde je spuštěna logika, \verb|ArgParser| (\verb|argParser.py|), kde probíhá zpracovávání jednotlivých argumentů (e-mailů) a parsování, a \verb|EmailAnalyzer| (\verb|analyze.py|), kde probíhá analýza a aplikování regulárních výrazů na jeden e-mail. Projekt jsem implementoval v jazyce \textit{python3}.
+
+\section{ArgParser}
+
+V tomto modulu probíhá zpracování jednotlivých e-mailů poskytnutých od uživatele jako argumenty skriptu. Pokud je argument zadán správně a soubor se podaří načíst (v opačném případě skončí analýza výstupem \verb|FAIL|), je využita knihovna \textit{eml-parser}, která e-mail zpracuje vstupní soubor do lepší struktury (\verb|dictionary|). Každý e-mail ještě skript upraví tak, že substituuje diakritiku standardními znaky. Tento převod zajišťuje knihovna \textit{unidecode}. Díky tomu je možné lépe analyzovat české či slovenské e-maily.
+
+\section{EmailAnalyzer}
+
+Analýza jednotlivých e-mailů funguje na principu aplikování několika regulárních výrazů rozdělených dle závažnosti a významu na e-mail. Každý takový regulární výraz tedy obsahuje významově podobná slova a má přiřazen určitý koeficient, neboli skóre. Pokud tedy některý z regulárních výrazů uspěje, přičte se k celkovému skóre e-mailu tento koeficient (znásobený počtem výskytu klíčových slov daného regulárního výrazu). Vyhodnocení pak funguje jako porovnání celkového skóre s určitým prahem - pokud je skóre vyšší, než práh, e-mail je označen jako spam.
+
+\subsection{Příklady aplikovaných významových regulárních výrazů}
+
+Aby bylo lépe pochopitelné, jak skript funguje, je třeba se podívat na určitý regulární výraz. Například detekce klíčových slov spojené se sexem je rozděleno do tří regulárních výrazů. V prvním, které má nejvyšší koeficient, jsou obsaženy slova jako \verb|naked photos| nebo \verb|suck your dick|. Pokud jsou taková slova v e-mailu nalezena, je v podstatě rovnou označen jako spam.
+
+Ve druhém regulárním výrazu, který již při nalezení dává e-mailu nižší skóre, tedy k označení jako spam je nutné nalézt alespoň dvě taková slova, jsou obsaženy fráze jako \verb|erotic|, \verb|premature ejaculate| nebo \verb|enlarging oil|. V nejméně závažném fráze jako \verb|your husband| nebo \verb|your wife|. Tímto je zlepšena ochrana před označením validního e-mailu jako \verb|SPAM|, pokud se v e-mailu vyskytne méně závažná fráze.
+
+Podobným stylem jsou ošetřeny i další typy nevyžádané pošty, jako léky, dědictví, výhry v loteriích, snadné triky k vydělání peněz a jiné. Tyto okruhy a klíčová slova jsem dal dohromady pouze pocitově z osobní analýzy různých datových setů se spamem. Většinu klíčových slov jsem se snažil také překládat do češtiny či slovenštiny, aby skript dokázal detekovat také náš spam.
+
+\newpage
+
+\subsection{Detekce klíčových slov bez významu}
+
+Tento skript nepracuje pouze s hledáním významových frází - snažil jsem se také aplikovat některá z pravidel z projektu \verb|SpamAssassin|. Kupříkladu pokud doména odesilatele obsahuje slova jako \verb|offer|, skóre e-mailu narůstá. Dalším příkladem může být například \textit{HTML} odkaz, který odkazuje na určitou IP adresu (využívané například u \textit{phishingu}), nebo pokud e-mail má pouze \textit{HTML} část, ale ne \textit{plaintext}. Skript také přičítá malé skóre, pokud e-mail obsahuje větší množství slov napsaného v kapitálkách. 
+
+\section{Výstup a použití}
+
+Skript obsahuje soubor \verb|Makefile|, který vytvoří symbolický odkaz. Poté je možno s programem pracovat jako se spustitelným souborem \verb|antispam|. Skript ověří všechny e-maily zadané argumenty. Pokud soubor neexistuje, vypíše k němu skript \verb|FAIL|, následně proběhne analýza, kdy skript k zadanému e-mailu vypíše \verb|SPAM| či \verb|OK|. Pokud je e-mail označen jako \verb|SPAM|, jsou vypsána i klíčová slova, na základě kterých skript e-mail jako \verb|SPAM| vyhodnotil (díky formě aplikování regulárního výrazu funkcí \verb|findall| má skript přístup k těmto klíčovým slovům).
+
+
+\end{document}

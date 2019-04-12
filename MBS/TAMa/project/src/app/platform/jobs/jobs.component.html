@@ -1,0 +1,97 @@
+<mat-sidenav-container fxFlex class="container">
+  <mat-sidenav class="sidenav-form" position="end" #sidenav [mode]="mode.value">
+    <tp-new-job (submitted)="sidenav.close()"></tp-new-job>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-card class="jobs-card">
+    <mat-tab-group mat-stretch-tabs>
+      <mat-tab label="Jobs">
+        <div [formGroup]="group" fxFlex fxLayout="row" style="margin-top: 8px;">
+          <mat-form-field fxFlex style="margin-right: 8px;" class="select-overflow" >
+            <mat-select formControlName="location" placeholder="Filter by Range" [disabled]="!(loc$ | async)">
+              <mat-option [value]="v" *ngFor="let v of locations">
+                <mat-icon>adjust</mat-icon>
+                {{v}}
+              </mat-option>
+              <mat-select-trigger>
+                <mat-icon>adjust</mat-icon>
+                {{group.controls.location.value}}
+              </mat-select-trigger>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex style="margin-left: 8px;" class="select-overflow">
+            <mat-select formControlName="category" placeholder="Filter by Category">
+              <mat-option value="All">
+                <mat-icon>view_comfy</mat-icon>
+                All
+              </mat-option>
+              <mat-option *ngFor="let c of categoriesKeys" [value]="c">
+                <mat-icon>{{categoriesList[c]}}</mat-icon>
+                {{c}}
+              </mat-option>
+              <mat-select-trigger>
+                <mat-icon>{{categoriesList[group.controls.category.value]}}</mat-icon>
+                {{group.controls.category.value}}
+              </mat-select-trigger>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-list>
+          <mat-list-item *ngFor="let job of jobs$ | async" (click)="goToDetail(job.id)">
+            <mat-icon color="primary" mat-list-icon>{{ categoriesList[job.category] }}</mat-icon>
+            <h4 mat-line>
+              {{ job.name }}
+            </h4>
+            <p mat-line>{{ job.description }}</p>
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+      <mat-tab label="My Offers">
+        <mat-list>
+          <mat-list-item *ngFor="let job of myJobs$ | async" (click)="goToDetail(job.id)">
+            <mat-icon color="primary" mat-list-icon>{{ categoriesList[job.category] }}</mat-icon>
+            <h4 mat-line>
+              {{ job.name }}
+            </h4>
+            <p mat-line>{{ job.description }}</p>
+            <mat-icon>
+              {{job | statusIcon:'offers'}}
+            </mat-icon>
+          </mat-list-item>
+          <mat-list-item *ngIf="(myJobs$ | async)?.length === 0">
+            <mat-icon>pregnant_woman</mat-icon>
+            There are currently no offers provided by you
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+      <mat-tab label="My Applications">
+        <mat-list>
+          <mat-list-item *ngFor="let job of appliedJobs$ | async" (click)="goToDetail(job.id)">
+            <mat-icon color="primary" mat-list-icon>{{ categoriesList[job.category] }}</mat-icon>
+            <h4 mat-line>
+              {{ job.name }}
+            </h4>
+            <p mat-line>{{ job.description }}</p>
+            <mat-icon>
+              {{job | statusIcon:'applications'}}
+            </mat-icon>
+          </mat-list-item>
+          <mat-list-item *ngIf="(appliedJobs$ | async)?.length === 0">
+            <mat-icon>pregnant_woman</mat-icon>
+            There are currently no offers provided by you
+          </mat-list-item>
+        </mat-list>
+      </mat-tab>
+    </mat-tab-group>
+    </mat-card>
+
+    <button mat-fab class="add-button" (click)="$event.stopPropagation(); sidenav.open()">
+      <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+    </button>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+

@@ -1,0 +1,11 @@
+@import "../../shared/styles/variables";
+
+.whole-width {
+  width: 100%;
+}
+
+.rating-card {
+  width: 100%;
+  border-radius: 0px;
+  top: $toolbar-height;
+}

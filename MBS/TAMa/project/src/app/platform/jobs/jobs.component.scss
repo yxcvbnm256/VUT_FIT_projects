@@ -1,0 +1,32 @@
+@import "../../shared/styles/variables";
+
+.container {
+  position: absolute;
+  top: $toolbar-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: $background-color;
+}
+
+.sidenav-form {
+  width: 82vw;
+  z-index: 1001;
+}
+
+.add-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+}
+
+.select-overflow {
+  overflow: hidden;
+}
+
+.jobs-card {
+  width: 100%;
+  border-radius: 0px;
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//CZ" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<title>ITU - Testování menu</title>
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+		<script src="scripts/main.js"></script>
+		<!--Import Google Icon Font-->
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+		<!--Import materialize.css-->
+		<link type="text/css" rel="stylesheet" href="css/style.css"media="screen,projection"/>
+		<!--Import jQuery before materialize.js-->
+		<script src="js/materialize.min.js"></script>
+
+	</head>
+	<body id="stats">
+		<script type="text/javascript">
+			var avgTime = [0,0,0];
+			var avgBadClicks = [0,0,0];
+			var menus = [];
+			var taskIds = [];
+			var taskNames = [];
+			var taskTimes = [];
+			var taskClicks = [];
+			var taskTested = [];
+			var menuMaxTime = 0;
+			var menuMaxClicks = 0;
+			var taskMaxClicks = 0;
+			var taskMaxTime = 0;
+
+			function getResults(){
+				$.getJSON("results.json", function(data) {
+					var dataLength = data.length;
+					var looped = 0; // Number of iterations over / number of times, avgTime was increased
+					menus = data[0].menus; // save menu
+					var numberOfMenus = menus.length;
+					console.log(data);
+
+					for (var i = 0; i < dataLength; i++){ // loop pres všechny výsledky
+						currentMenus = data[i].menus; // Poradí menu v aktuálním záznamu
+						var len = data[i].resultTimes.length; // Pocet ukolů
+						var taskPerMenu = len / currentMenus.length; // Pocet ukolu pro jedno menu
+
+						// Ke každému menu patří třetina výsledků, pořadí menu jsou však různá
+						// Dekuji Davide
+						for(var x = 0; x < numberOfMenus ; x++){ // Prochazej to po jednotlivých menu
+							var menuIndex = menus.indexOf(currentMenus[x]);
+							for( var j = (taskPerMenu * x), len = (taskPerMenu * (1+x)); j < len; j++ ){// Po třetinkách ukolů přiřazuj data
+								avgTime[menuIndex] += data[i].resultTimes[j];
+								avgBadClicks[menuIndex] += data[i].wrongClicks[j];
+								//console.log(taskIds.indexOf(data[i].instructionsOrder[j]));
+								taskTested[ taskIds.indexOf(data[i].instructionsOrder[j]) ] ++;
+								taskClicks[taskIds.indexOf(data[i].instructionsOrder[j])] += data[i].wrongClicks[j];
+								taskTimes[taskIds.indexOf(data[i].instructionsOrder[j])] += data[i].resultTimes[j];
+								looped++;
+							}
+						}
+
+
+					}
+
+					for (var i = avgTime.length - 1; i >= 0; i--) { // Do avg se doted jen pricitalo, nyní je třeba jej vydělit, aby se dostal prumerny cas
+						avgTime[i] = Math.round( ( avgTime[i] / (looped / avgTime.length) ) / 10) / 100;
+						avgBadClicks[i] = Math.round( avgBadClicks[i] / (looped / avgBadClicks.length) * 100) / 100 ;
+						if (menuMaxTime < avgTime[i]) {menuMaxTime = avgTime[i];}
+						if (menuMaxClicks < avgBadClicks[i]) {menuMaxClicks = avgBadClicks[i];}
+
+					}
+
+					for (var i = taskIds.length - 1; i >= 0; i--) {
+						taskTimes[i] = Math.round( (taskTimes[i]/taskTested[i])/10 )/100;
+						taskClicks[i] = Math.round ( (taskClicks[i]/taskTested[i]) * 100 )/100;
+						if (taskMaxTime < taskTimes[i]) {taskMaxTime = taskTimes[i];}
+						if (taskMaxClicks < taskClicks[i]) {taskMaxClicks = taskClicks[i];}
+					}
+
+					// Výpis o jednotlivých menu
+					var html = "";
+					for (var i = avgTime.length - 1; i >= 0; i--){
+						html += "<li>";
+						html += "<h5>" + getMenuName(menus[i])+ "</h5>";
+						html += "<span class='time'>Průměrný čas kliku: " + (isNaN(avgTime[i]) ? 0 : avgTime[i]) + " s</span>";
+
+						html += '<div class="progress cyan lighten-5"><div class="determinate cyan" style="width:'+ (avgTime[i]/menuMaxTime) * 100 +'%"></div></div>';
+						html += "<span class='wrongclicks'>Průměrně špatných kliků: " + (isNaN(avgBadClicks[i]) ? 0 : avgBadClicks[i]) + "</span>";
+
+						html += '<div class="progress pink lighten-5"><div class="determinate pink" style="width:'+ (avgBadClicks[i]/menuMaxClicks) * 100 +'%"></div></div>';
+						html += "</li>";
+					}
+					$("#menu-stats").append(html);
+
+					// výpis jednotlivžch úkolů
+					html = "";
+					for (var i = taskIds.length - 1; i >= 0; i--) {
+						html += "<li>";
+						html += "<h5>" + taskNames[i] + "</h5>";
+						html += "<p>Celkem zobrazeno v testech "+taskTested[i]+"x</p>";
+						html += "<span class='time'>Průměrně potřebný čas na správný klik: " + (isNaN(taskTimes[i]) ? 0 : taskTimes[i]) +" s</span>";
+						html += '<div class="progress cyan lighten-5"><div class="determinate cyan" style="width:'+ (taskTimes[i]/taskMaxTime) * 100 +'%"></div></div>';
+						html += "<span class='wrongclicks'>Průměrně špatných kliků na úkol: " + (isNaN(taskClicks[i]) ? 0 : taskClicks[i]) +"</span>";
+						html += '<div class="progress pink lighten-5"><div class="determinate pink" style="width:'+ (taskClicks[i]/taskMaxClicks) * 100 +'%"></div></div>';
+
+						html += "</li>";
+					}
+					$("#menuitems-stats").append(html);
+
+					console.log("avgTime: " +avgTime);
+					console.log(taskIds);
+					console.log(taskTested);
+					console.log(taskTimes);
+					console.log(taskClicks);
+					console.log(menuMaxTime);
+					console.log(menuMaxClicks);
+					console.log(taskMaxTime);
+				}); 
+			}
+
+		
+			$(function(){
+
+				// Nahrání základních dat o položkách v menu
+				// Nahraje se jejich id a jméno, ostatní data se nastaví na 0, aby měly stejný index v poli
+				$.getJSON("data/menu.json", function(data) {
+					console.log(data);
+					for (var i = data.Items.length - 1; i >= 0; i--) {
+						console.log(data.Items[i]);
+						if (data.Items[i].Items != null)
+						{
+							for (var j = data.Items[i].Items.length - 1; j >= 0; j--) {
+								taskIds.push(data.Items[i].Items[j].Id);
+								taskNames.push(data.Items[i].Items[j].Name);
+								taskTested.push(0);
+								taskTimes.push(0);
+								taskClicks.push(0);
+							
+								//console.log(data.Items[i].Items[j]);
+							}
+						}
+						else {
+							taskIds.push(data.Items[i].Id);
+							taskNames.push(data.Items[i].Name);
+							taskTested.push(0);
+							taskTimes.push(0);
+							taskClicks.push(0);
+						}
+					}
+
+					getResults();
+
+				});
+
+			})
+
+		</script>
+
+		<div class="container" id="main">
+			<div>
+				<h2>Menu dle rychlosti</h2>
+				<ul id="menu-stats"></ul>
+
+				<h2>Kliky na položky v menu</h2>
+				<ul id="menuitems-stats"></ul>
+
+			</div>
+			
+		</div>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+﻿@charset "UTF-8";
+ /* 
+ Hlavní soubor, který jako jediný chceme kompilovat do css
+ Pro další styly vytvořit vlastní soubor.scss a přidat jej sem.
+
+ Kompilátory jsou volně dostupné na webu, já například používam Koala.
+ Pokud jste fajnšměkři, tak to jde i příkazovou řádkou, ale tomu já neholduji.
+ */
+
+
+// kompletní Materializecss, případně možné přidávat/oddělávat komponenty v materialize.scss
+@import "materialize.scss";
+
+
+// Stylovani Tasků
+@import "tasks.scss";
+
+// Stylovani Menu
+@import "menu.scss";
+
+
+// Barvy
+$indigo: #303f9f;
+
+
+
+#test{
+	//background-color: #eceff1 ;
+
+	h1, h2, h3, h4, h5{
+		color: #303f9f;
+	}
+
+	p, ul, li{
+		color: $indigo;
+	}
+
+	.progress{
+		background-color: #b2ebf2;
+		.determinate{
+			background-color:#00bcd4;
+		}
+	}
+
+}
+
+#main{
+	position: absolute;
+	margin: 0 auto;
+	left:0;
+	right: 0;
+	top: 0;
+}
+
+#currentTask{
+	color: $indigo;
+}
+
+#stats{
+	background-color: #eceff1;
+
+	color: #303f9f;
+
+	h2{
+		color: #303f9f;
+		margin: 5rem 0 0 0;
+	}
+
+	h5{
+		margin: 2.5rem 0 0.5rem 0;
+	}
+
+	p{
+		margin: 0 0 1rem 0;
+	}
+}
+
+.instructions{
+	font-size: 1.25rem;
+
+	li{
+		margin: 2rem 0;
+	}
+}
+
+.wrongclicks{
+	color: #e91e63 
+}
+
+.time{
+	color: #00bcd4;
+}
+

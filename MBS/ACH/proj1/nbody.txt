@@ -1,0 +1,111 @@
+Architektura procesorů (ACH 2018)
+Projekt č. 1 (nbody)
+Login: xpawlu00
+
+U každého kroku proveďte měření simulace (1500 částic, 750 kroků) a to na čas simulace, vektorový i skalární výkon,
+počet výpadku v cache (alespoň L1 a L2). Dále odpovězte na požadované otázky.
+
+
+Krok 0: základní implementace
+=============================
+Celkový čas [s]: 59.87 s
+Výkon skalárních operací [MFLOPS]:      1552,84
+Výkon vektorových operací [MFLOPS]:     1129,6
+L1 miss [%]:                            1,58 %
+L2 miss [%]:                            0,00112 %
+L3 miss [%]:                            10,1 %
+
+Které PAPI_EVENTS jste použili pro získání počtu výpadků v paměti?
+HW countery pro L1: PAPI_LD_INS|PAPI_SR_INS|PAPI_L1_TCM
+HW countery pro L2: PAPI_L2_TCA|PAPI_L2_TCM
+HW countery pro L3: PAPI_L3_TCA|PAPI_L3_TCM
+
+
+Krok 1: vektorizovaná implementace
+===================================
+Celkový čas [s]: 20.26 s
+Výkon skalárních operací [MFLOPS]:      97,68
+Výkon vektorových operací [MFLOPS]:     5506,22
+L1 miss [%]:                            2,59 %
+L2 miss [%]:                            0,00344 %
+L3 miss [%]:                            6,19 %
+
+Jaké pragmy bylo potřeba přidat?
+- k funkcím byla přidána #pragma omp declare simd linear(p1,vel:1) uniform(p2), k výpočetní smyčce #pragma omp simd.
+Které dovětky k pragmám jste použili a jaky měly vliv na kompilátorem generované funkce? (velocity.optrpt)
+- kompilátor vypisuje FUNCTION WAS VECTORIZED.
+
+
+Krok 2: přístupy do paměti
+=============================
+Celkový čas [s]: 27.33 s
+Výkon skalárních operací [MFLOPS]:      93,65
+Výkon vektorových operací [MFLOPS]:     4061,75
+L1 miss [%]:                            1,58 %
+L2 miss [%]:                            0,000689 %
+L3 miss [%]:                            7,73 %
+
+
+Jak jste zarovnali data v paměti a informovali překladač?
+- data v paměti byla zarovnána na velikost cache line (64 B) za pomoci __declspec(align(64)). Překladač byl informován klauzolí align v omp pragmě.
+Měla tato úprava vliv na výpadky? Na výkon? Proč?
+- tato úprava snížila výpadky v L1 a L2 cache, bohužel vliv na výkon byl negativní, což ale není způsobeno zarovnáním paměti, ale např. zbytečnou prací navíc se strukturou při volání a návratu z výpočetních funkcí atd.
+
+Krok 3: režie funkcí
+===================================
+3.1: spojení funkcí
+-----------------------------------
+Celkový čas [s]: 23.31 s
+Výkon skalárních operací [MFLOPS]:      23,3299
+Výkon vektorových operací [MFLOPS]:     2404,51
+L1 miss [%]:                            1,973 %
+L2 miss [%]:                            0,0015 %
+L3 miss [%]:                            68,1 %
+
+3.2: úprava rozhraní
+-----------------------------------
+Celkový čas [s]: 10.96 s
+Výkon skalárních operací [MFLOPS]:      71,98
+Výkon vektorových operací [MFLOPS]:     5191,23
+L1 miss [%]:                            5,2 %
+L2 miss [%]:                            0,00106 %
+L3 miss [%]:                            71,9 %
+
+3.3: bez volání funkce
+-----------------------------------
+Celkový čas [s]: 7.62 s
+Výkon skalárních operací [MFLOPS]:      16,44
+Výkon vektorových operací [MFLOPS]:     6740,63
+L1 miss [%]:                            14,62 %
+L2 miss [%]:                            0,0016 %
+L3 miss [%]:                            85,5 %
+
+Která verze je nejefektivnější a proč?
+- nejefektivnější je verze 3.3, protože odstraňuje volání funkce, tedy skokové instrukce spojené s voláním a návratem z funkce.
+
+Krok 4: úprava složitosti výpočtu
+===================================
+Vypočtěte kolik částic se teoreticky vejde do paměti cache procesoru.
+(Velikost cache můžete zjistit příkazem 'lscpu'.) 
+
+Jedna částice obsahuje 7 typů float a zároveň se ke každé částici ukládají informace o změně rychlosti (3 floaty), tedy 4 * 10 = 40 B.
+
+Maximální počet částic v L1: 32 000 / 40 = 800
+Maximální počet částic v L2: 256 000 / 40 = 6400
+Maximální počet částic v L3: 20 480 000 / 40 = 512000
+
+
+Vyplňte následující tabulku tak, aby demonstrovala běh s a bez výpadků v L1 a L2 cache. Zvolte vhodné hodnoty počtu částic N (Budou nižši než teoretické limity vypočteny dříve):
+
+N       L1 miss [%]  L2 miss [%]  L3 miss [%]  výkon [MFLOPS]   čas [s]
+400     0,0036       5            9            5369,52          0,37
+600     0,016        1,88         71,7         6449,37          0,7
+1000    0,1          0,103        61,1         6482,45          1,89
+2000    7,15         0,0043       14,2         6594,56          7,64
+5500    11,87        0,0187       1,62         6572,5           58,11
+7500    12,21        0,0332       0,818        6554,9           107,14
+
+Popište, jaký dopad na výkon mají výpadky v~cache.
+- lze pozorovat, že pokud pracujeme s počtem prvků, které se vejdou do L1 (600) a které ne (1000), procento výpadků vzroste téměř o desetinásobek. Nicméně výkon zůstává podobný (6449.37 vs. 6482,45 MFLOPS). Situace je podobná i u L2 cache - rozdíl v procentu výpadků při počtu prvků, které se vlezou do L2 (5500) a které ne (7500), je zhruba trojnásobný. Na výkon to ale opět velký vliv nemá (6572,5 vs. 6554,9 MFLOPS).
+Jak byste tento vliv omezili?
+- Kromě provedených optimalizací ve všech krocích by mohlo omezit vliv například rozdělení výpočtu na bloky o velikosti cache.

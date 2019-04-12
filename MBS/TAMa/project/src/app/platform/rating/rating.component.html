@@ -1,0 +1,13 @@
+<mat-card class="rating-card">
+  <h1 class="mat-h1">{{ jobName }} - {{ userName }}</h1>
+  <form *ngIf="ratingForm" [formGroup]="ratingForm" (ngSubmit)="update()" class="ratingForm">
+    <star-rating-control formControlName="rating" [showHalfStars]="true" [starType]="'svg'" [readOnly]="rated" size="large"></star-rating-control>
+    <mat-form-field class="whole-width">
+      <textarea matInput type="text" placeholder="Text" formControlName="text"></textarea>
+    </mat-form-field>
+    <button *ngIf="!rated" color="primary" type="submit" [disabled]="ratingForm.invalid" mat-raised-button class="whole-width"
+            style="margin-bottom: 10px;">
+      Save
+    </button>
+  </form>
+</mat-card>

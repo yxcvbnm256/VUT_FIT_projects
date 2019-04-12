@@ -1,0 +1,140 @@
+diff -Naur original/rivercrossing.c changed/rivercrossing.c
+--- original/rivercrossing.c	2014-05-04 23:28:20.000000000 +0200
++++ changed/rivercrossing.c	2014-05-06 10:34:29.000000000 +0200
+@@ -29,7 +29,8 @@
+ typedef struct {
+ 	sem_t *molo;
+ 	sem_t *vypis;
+-	sem_t *boarding;
++	sem_t *boardingHacker;
++	sem_t *boardingSerf;
+ 	sem_t *onBoard;
+ 	sem_t *mainstreamSemaphore;
+ 	sem_t *mainstreamSemaphoreX;
+@@ -46,7 +47,8 @@
+ 	sem_close(sema->vypis);
+ 	sem_close(sema->waitCaptain);
+ 	sem_close(sema->onBoard);
+-	sem_close(sema->boarding);
++	sem_close(sema->boardingSerf);
++	sem_close(sema->boardingHacker);
+ 	sem_close(sema->waitForOthers);
+ 	sem_close(sema->mainstreamSemaphore);	
+ 	sem_close(sema->mainstreamSemaphoreX);	
+@@ -65,6 +67,7 @@
+ 	sem_unlink("/xpawlu00sema10");
+ 	sem_unlink("/xpawlu00sema11");
+ 	sem_unlink("/xpawlu00sema12");
++	sem_unlink("/xpawlu00sema13");
+ 	//Zavreni souboru
+ 	fclose(info->file);
+ 	munmap(info, sizeof(processinfo));
+@@ -92,9 +95,9 @@
+ 		isCaptain = 1;
+ 		info->hackerOnMolo = 0;
+ 		//Posledni hacker, resp. kapitan, povoli ostatnim procesum v dalsim postupu
+-		sem_post(sema->boarding);
+-        	sem_post(sema->boarding);
+-        	sem_post(sema->boarding);
++		sem_post(sema->boardingHacker);
++        sem_post(sema->boardingHacker);
++        sem_post(sema->boardingHacker);
+ 	}
+ 	//Pokud prisel druhy hacker a pocet serfu je dva nebo vice, stava se tento hacker kapitanem a uzavira se skupinka (2:2). Pripadny prebytecny serf zustava na molu
+ 	else if (info->hackerOnMolo == 2 && info->serfOnMolo >= 2)
+@@ -102,15 +105,15 @@
+ 		isCaptain = 1;
+ 		info->serfOnMolo -= 2;
+ 		info->hackerOnMolo = 0;
+-		sem_post(sema->boarding);
+-		sem_post(sema->boarding);
+-		sem_post(sema->boarding);
++		sem_post(sema->boardingHacker);
++		sem_post(sema->boardingSerf);
++		sem_post(sema->boardingSerf);
+ 	}
+ 	else
+ 	//Pokud skupinka neni v potrebnem pomeru, tak tento hacker uvolni semafor, ktery posle dalsi proces na molo
+ 	{
+ 		sem_post(sema->molo);
+-		sem_wait(sema->boarding);
++		sem_wait(sema->boardingHacker);
+ 	}	
+ 	sem_wait(sema->waitReady);
+ 	info->hackerReady++;
+@@ -236,9 +239,9 @@
+ 	{
+ 		isCaptain = 1;
+ 		info->serfOnMolo = 0;
+-		sem_post(sema->boarding);
+-                sem_post(sema->boarding);
+-                sem_post(sema->boarding);
++		sem_post(sema->boardingSerf);
++        sem_post(sema->boardingSerf);
++        sem_post(sema->boardingSerf);
+ 
+ 	}
+ 	else if (info->serfOnMolo == 2 && info->hackerOnMolo >= 2)
+@@ -246,15 +249,15 @@
+ 		isCaptain = 1;
+ 		info->hackerOnMolo -= 2;
+ 		info->serfOnMolo = 0;
+-		sem_post(sema->boarding);
+-                sem_post(sema->boarding);
+-                sem_post(sema->boarding);
++		sem_post(sema->boardingHacker);
++        sem_post(sema->boardingHacker);
++        sem_post(sema->boardingSerf);
+ 
+ 	}
+ 	else
+ 	{
+ 		sem_post(sema->molo);
+-		sem_wait(sema->boarding);
++		sem_wait(sema->boardingSerf);
+ 	}
+ 	sem_wait(sema->waitReady);
+ 	info->serfReady++;
+@@ -378,7 +381,7 @@
+ 		//Akce parenta - navratova hodnota parenta po forku = PID potomka -> ulozim do pole
+ 		else if (h > 0)
+ 		{
+-			hackerArray[i] = h;
++			hackerArray[i] = h;			
+ 		}
+ 		//Fork se nezdaril		
+ 		else if (h < 0)
+@@ -394,7 +397,11 @@
+             fprintf(stderr,"Unsuccessful fork\n");
+             exit(2);
+ 		}
+-	}	
++	}
++	for (int i = 0; i < p; i++)
++	{
++        wait(NULL);
++    }	
+ }
+ //Velmi podobny popis jako u funkce hackerMake();
+ void serfMake(int p, int serftime, processinfo *info, semafory *sema, int shm_fd) {	
+@@ -426,6 +433,10 @@
+ 			exit(2);               	
+ 		}
+ 	}
++	for (int i = 0; i < p; i++)
++	{
++        wait(NULL);
++    }
+ }
+ 
+ int main(int argc, char *argv[]) {
+@@ -464,7 +475,8 @@
+ 		//Otevreni semaforu		
+ 		sema.vypis = sem_open("/xpawlu00sema1", O_CREAT | O_EXCL, 0644, 1);
+ 		sema.molo = sem_open("/xpawlu00sema2", O_CREAT | O_EXCL, 0644, 1);
+-		sema.boarding = sem_open("/xpawlu00sema3", O_CREAT | O_EXCL, 0644, 0);
++		sema.boardingSerf = sem_open("/xpawlu00sema13", O_CREAT | O_EXCL, 0644, 0);
++		sema.boardingHacker = sem_open("/xpawlu00sema3", O_CREAT | O_EXCL, 0644, 0);
+ 		sema.waitCaptain = sem_open("/xpawlu00sema4", O_CREAT | O_EXCL, 0644, 0);
+ 		sema.onBoard = sem_open("/xpawlu00sema5", O_CREAT | O_EXCL, 0644, 0);
+ 		sema.waitForOthers = sem_open("/xpawlu00sema6", O_CREAT | O_EXCL, 0644, 0);

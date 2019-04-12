@@ -1,0 +1,30 @@
+﻿{
+	"MainGoal": "<strong>Vžijete se do role pracovníka či manažera firmy, která používá systém pro personalistiku a mzdy</strong>. Je třeba rozlišit, které úkoly se týkají role pracovníka a které role manažera. Manažerovi jsou přístupné jak položky pro zaměstnance, tak pro manažera.",
+	"Items": [
+		{"Name": "Zaměstnanec", "Id": 20, "Key": "z",
+		"Items": 
+			[
+				{"Name": "Osobní údaje", "Inst": ["Najděte rodné číslo pracovníka.", "Zjistěte adresu pracovníka.", "Zjistěte telefonní číslo pracovníka."], "Id": 0, "Key": "j"},
+				{"Name": "Výplatní lístek", "Inst": ["Podívejte se na informace o Vašem platu.", "Zjistěte, kolik si pracovník vydělal za minulý měsíc.", "Zjistěte, kolik jste si vydělal/a v prosinci 2015."], "Id": 1, "Key": "p"},
+				{"Name": "Lékařské prohlídky", "Inst": ["Zjistěte, zda absolvoval pracovník nějaké prohlídky u doktora.", "Zjistěte, zda má máte v plánu lékařskou prohlídku."], "Id": 2, "Key": "l"},
+				{"Name": "Služební cesty", "Inst": ["Vytvořte výkaz o absolvované služební cestě.", "Smažte špatně vytvořený výkaz o služení cestě.", "Podívejte se, zda máte naplánovanou nějakou služení cestu."], "Id": 4, "Key": "v"},
+				{"Name": "Docházka", "Inst": ["Zjistěte, kolikrát byl zamětnanec minulý týden v práci.", "Zjistěte, zda jste v pátek nezapomněl/a nahlást přítomnost na pracovišti."], "Id": 5, "Key": "a"},
+				{"Name": "Žádost o dovolenou", "Inst": ["Požádejte o dovolenou na první tři dny příštího týdne.", "Zjistěte, zda jste v aktuálním měsící požádal/a o dovolenou.", "Zruště žádost o dovolenou, kterou jste podal/a na příští měsíc."], "Id": 6, "Key": "t"},
+				{"Name": "Školení", "Inst": ["Ohodnoťte své poslední školení.", "Zjistěte, zda máte naplánované školení.", "Podívejte se, kolik školících akcí jste absolvoval/a."], "Id": 13, "Key": "o"}
+			]				
+		},
+		{"Name": "Manažer", "Id": 21, "Key": "m",
+		"Items":
+			[
+				{"Name": "Pracovníci", "Inst": ["V seznamu pracovníků vyhledejte dělníka Zdeňka Studeného.", "Zjistěte, kolik pracovníků aktuálně zpracováváte."], "Id": 7, "Key": "i"},
+				{"Name": "Schvalování cestovních výkazů", "Inst": ["Zamítněte zaměstnanci výkaz o absolvované služební cestě.", "Schalte pracovníkovi výkaz o služební cestě."], "Id": 9, "Key": "c"},
+				{"Name": "Schvalování žádostí o dovolenou", "Inst": ["Zamítněte zaměstnanci žádost o dovolenou.", "Schvalte zaměstnanci žádost o dovolenou."], "Id": 10, "Key": "s"},
+				{"Name": "Prémie", "Key": "r", "Id": 11, "Inst": ["Přidělte zaměstnanci prémii za dobře odváděnou práci.", "Odstraňte zaměstnanci prémii za špatně odvedenou práci."]},
+				{"Name": "Uchazeči", "Key": "u", "Id": 12, "Inst": ["Najděte v seznamu uchazečů o práci dělníka Zdeňka Studeného.", "Podívejte se, zda přibyli noví uchazeči o práci."]}
+			]	
+		},
+		{"Name": "O nás", "Id": 22, "Key": "n", "Inst": ["Zjistěte, v jakých okruzích Vaše firma podniká."]},
+		{"Name": "Historie", "Id": 23, "Key": "h", "Inst": ["Kdy byla Vaše firma založena?", "Kdo je zakladatelem firmy?"]},
+		{"Name": "Kontakty", "Id": 24, "Key": "k", "Inst": ["Zjistěte kontakt na ředitele firmy.", "Zjistěte adresu sídla firmy."]}		
+	]
+}

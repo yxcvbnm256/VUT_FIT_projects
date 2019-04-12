@@ -1,0 +1,31 @@
+@import "../../shared/styles/variables";
+
+.sexyjobs-list-item {
+  height: auto !important;
+  padding: 5px 0 5px 0 !important;
+}
+
+.profile-card {
+  width: 100%;
+  border-radius: 0px;
+  top: $toolbar-height;
+}
+
+.pwa-update-container {
+  margin-top: 10px;
+  display: inline-block;
+}
+
+
+.text-bold {
+  font-weight: bold !important;
+}
+
+/deep/.mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+.image-profile {
+  border-radius: 50%;
+  margin-bottom: 2vh;
+}

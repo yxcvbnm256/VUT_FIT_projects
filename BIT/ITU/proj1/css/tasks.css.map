@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,KAAK,CACJ,MAAM,CAAE,mBAAmB,CAC3B,SAAS,CAAE,KAAK",
+"sources": ["../sass/tasks.scss"],
+"names": [],
+"file": "tasks.css"
+}

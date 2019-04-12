@@ -1,0 +1,68 @@
+<mat-card class="profile-card">
+  <h1 class="mat-h1">{{ currentUser?.name }}</h1>
+
+  <img *ngIf="photoUrl" [src]="photoUrl" class="image-profile mat-elevation-z8">
+  <mat-accordion displayMode="flat">
+    <mat-expansion-panel [expanded]="!myAccount" class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+        </mat-panel-title>
+        <mat-panel-description>
+          <star-rating [rating]="avgRating" [showHalfStars]="true" [starType]="'svg'" size="large" [readOnly]="true"></star-rating>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-list dense>
+        <div *ngFor="let item of ratings">
+          <mat-divider></mat-divider>
+          <mat-list-item class="sexyjobs-list-item">
+            <star-rating [rating]="item.rating" [showHalfStars]="true" [starType]="'svg'" size="small" [readOnly]="true"></star-rating>
+            <p><span class="text-bold">{{item.name}}</span> - {{item.text}}</p>
+
+          </mat-list-item>
+        </div>
+
+      </mat-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <form *ngIf="profileForm && (myAccount || showAddress)" [formGroup]="profileForm" (ngSubmit)="update()">
+    <mat-form-field class="whole-width">
+      <input matInput type="tel" placeholder="Phone" formControlName="phone">
+    </mat-form-field>
+    <mat-form-field class="whole-width">
+      <input matInput type="text" placeholder="Address" formControlName="address">
+    </mat-form-field>
+  <div class="buttons-row" *ngIf="!showAddress">
+    <button (click)="logout()" mat-stroked-button class="whole-width">
+      <mat-icon>power_settings_new</mat-icon>
+      Logout
+    </button>
+    <button type="submit" class="whole-width" [disabled]="profileForm.invalid" mat-stroked-button>
+      <mat-icon>save</mat-icon>
+      Save
+    </button>
+  </div>
+    <div class="buttons-row" *ngIf="(validServiceWorker$ | async)">
+      <button *ngIf="!(searchingUpdates$ | async); else searching"
+              (click)="checkForUpdates()"
+              mat-stroked-button class="whole-width"
+      >
+        <mat-icon>autorenew</mat-icon>
+        Check for updates
+      </button>
+
+      <ng-template #searching>
+        <button disabled="true" class="whole-width"
+                mat-stroked-button color="primary"
+        >
+          Searching...
+        </button>
+      </ng-template>
+    </div>
+  </form>
+
+
+
+
+
+
+</mat-card>

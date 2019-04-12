@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $# -lt 1 ];then 
+    echo ERROR: two parameters expected
+    exit 1
+else
+    str=$1;
+    cpus=${#1};
+    cpus=$((2*$cpus-2))
+fi;
+
+#preklad cpp zdrojaku
+mpic++ --prefix /usr/local/share/OpenMPI -o pro pro.cpp -std=c++11
+
+#spusteni
+mpirun --mca orte_base_help_aggregate 0 --prefix /usr/local/share/OpenMPI -np $cpus ./pro $str
+
+#uklid
+rm -f pro

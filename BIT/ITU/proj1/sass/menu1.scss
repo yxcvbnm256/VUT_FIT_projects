@@ -1,0 +1,87 @@
+
+/* main menu styles */
+.menu1 {
+    background:#607D8B;
+}
+
+.menu1 > ul, .menu1 > ul ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.menu1 > ul {
+    height:41px;
+    padding-left:5px;
+    position:relative;
+    z-index:2;
+}
+.menu1 > ul ul {
+    left:-9999px;
+    position:absolute;
+    top: 64px;
+    width:auto;
+}
+.menu1 > ul ul ul {
+    left:-9999px;
+    position:absolute;
+    top:0;
+    width:auto;
+}
+.menu1 > ul li {
+    float:left;
+    margin-right:0px;
+    position:relative;
+    line-height: 2.8;
+}
+.menu1 > ul li a {
+    background:#607D8B;
+    color:#FFF;
+    display:block;
+    float:left;
+    font-size:16px;
+    padding:8px 10px;
+    text-decoration:none;
+    padding: 10px 15px;
+}
+.menu1 > ul > li > a {
+    overflow:hidden;
+}
+.menu1 > ul li a.fly {
+    background:#c1c1bf url(../images/arrow.gif) no-repeat right center;
+    padding-right:15px;
+}
+.menu1 > ul ul li {
+    margin:0;
+    line-height:1.5;
+}
+.menu1 > ul ul li a {
+    width:220px;
+    background: #455A64;
+}
+.menu1 > ul ul li a.fly {
+    padding-right:10px;
+}
+
+/*hover styles*/
+.menu1 > ul li:hover > a {
+    background-color:#455A64;
+    color:#fff;
+}
+
+.menu1 > ul li ul li:hover > a {
+    background-color:#394951;
+    color:#fff;
+}
+
+/*focus styles*/
+    .menu1 > ul li a:focus {
+    outline-width:0;
+}
+
+/*popups*/
+.menu1 > ul li a:active + ul,.menu1 > ul li a:focus + ul,.menu1 > ul li ul:hover {
+    left:0;
+}
+.menu1 > ul > li > ul li a:active + ul,.menu1 > ul > li > ul li a:focus + ul,.menu1 > ul > li > ul li ul:hover {
+    left:140px;
+}

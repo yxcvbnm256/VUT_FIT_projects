@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project outputprefix="sid">
+
+	<!--  Project description -->
+	<name>Prehravac SID</name>
+	<author>xpawlu00</author>
+
+	<!--  MCU part -->
+	<mcu>
+      <include>mcu/libs/codec/package.xml</include>
+		<file>main.c</file>
+	</mcu>
+
+	<!-- FPGA part -->
+	<fpga architecture="gp" dcmfrequency="40MHz">
+		<file>engen.vhd</file>
+		<file>top.vhd</file>
+		<file>sid6581.vhd</file>
+		<file>voice_gen.vhd</file>
+	</fpga>
+
+</project>

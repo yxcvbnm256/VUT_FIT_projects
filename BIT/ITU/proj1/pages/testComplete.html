@@ -1,0 +1,86 @@
+<script>
+    $(function () {
+        var rAvg = [0,0,0];
+        var cAvg = [0,0,0];
+        var maxBadClicks = 0;
+        var maxTime = 0;
+        //suma vsech hodnot pro jednotliva menu
+        for (i = 0; i < (maxTasks / maxMenus) ; i++) {
+            rAvg[0] += resultTimes[i];
+            rAvg[1] += resultTimes[(maxTasks / maxMenus) + i];
+            rAvg[2] += resultTimes[((maxTasks / maxMenus) * 2) + i];
+            cAvg[0] += resultWrongClicks[i];
+            cAvg[1] += resultWrongClicks[(maxTasks / maxMenus) + i];
+            cAvg[2] += resultWrongClicks[((maxTasks / maxMenus) * 2) + i];
+        }
+
+        for (var i = rAvg.length - 1; i >= 0; i--) {
+            rAvg[i] = Number((((rAvg[i] / (maxTasks / maxMenus)) / 1000)).toFixed(2));
+            if ( maxTime < rAvg[i]) { maxTime = rAvg[i];}
+            if (maxBadClicks < cAvg[i]) { maxBadClicks = cAvg[i];}        
+        }
+
+        var html = "";
+        for (var i = rAvg.length - 1; i >= 0; i--) {
+            html += "<li>";
+            html += "<h5>" + getMenuName(menus[i])+ "</h5>";
+            html += "<span class='time'>Průměrně potřebný čas na správný klik: " + rAvg[i] +" s</span>";
+            html += '<div class="progress cyan lighten-5"><div class="determinate cyan" style="width:'+ (rAvg[i]/maxTime) * 100 +'%"></div></div>';
+            html += "<span class='wrongclicks'>Průměrně špatných kliků na úkol: " + Number(cAvg[i]/(maxTasks / maxMenus)).toFixed(2) +"</span>";
+            html += '<div class="progress pink lighten-5"><div class="determinate pink" style="width:'+ (cAvg[i]/maxBadClicks) * 100 +'%"></div></div>';
+            html += "</li>";
+
+        }
+        $("#test-stats").append(html);
+    })
+
+    function saveFeedback() {
+        var feedback = $('#feedback').val();
+        if (feedback != '') {
+            console.log(JSON.stringify(feedback));
+            $('#feedback').val('');
+            $.ajax
+            ({
+                type: "POST",
+                url: window.location.href.split("#")[0]+'save_feedback.php',
+               // data: feedback,
+                data: { data: JSON.stringify(feedback)},
+                success: function () {console.log(window.location.href.split("#")[0]+'save_feedback.php'); },
+                failure: function() {alert("Nepovdlo se uložit, prosím, kontaktujte support.");}
+            });
+            $("#statsButton").attr('class', 'waves-effect waves-light btn pink');
+            $("#unlockstats").hide("slow");
+
+        }
+    }   
+
+</script>
+
+<div class="row">
+    <div class="col s12">
+        <h2>Test úspěšně dokončen</h2>
+        <p>Níže jsou uvedeny naměřené výsledky pro jednotlivá menu. Budeme také rádi za váš názor na práci s menu.</p>
+        <ul id="test-stats"></ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12" id="personFeedback">
+        <div class="row">
+            <h2>Feedback</h2>
+            <div class="input-field col s12">
+                <p>
+                    <textarea id="feedback" class="materialize-textarea"></textarea>
+                    <label for="feedback">Popište co Vám na jednotlivých menu vadilo, nebo bylo pro Vás bylo příjemné? Bylo během testu něco nesrozumitelného? Prosím, všechny Vaše postřehy tady zmiňte, moc si jich vážíme.</label>
+                    <button class="waves-effect waves-light btn pink" onClick="saveFeedback()">Odeslat feedback</a>
+                </p>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <p id="unlockstats">Pro odemknutí statistik prosím vyplňte feedback.</p>
+                <a id="statsButton" class="waves-effect waves-light btn pink disabled" href="stats.html">Zobrazit, jak si v testu vedli ostatní</a>
+            </div>
+        </div>
+    </div>
+</div>
